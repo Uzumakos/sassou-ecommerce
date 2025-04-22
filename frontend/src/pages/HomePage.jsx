@@ -13,7 +13,7 @@ const categories = [
 	{ href: "/skin care", name: "Skin Care", imageUrl: "/lwil_hero.jpg" },
 	{ href: "/hair care", name: "Hair Care", imageUrl: "/package1.jpg" },
 	{ href: "/candle", name: "Candle", imageUrl: "/puppy1.jpg" },
-	{ href: "/savon", name: "Savon", imageUrl: "/savon2.jpg" },
+	{ href: "/soap", name: "Soap", imageUrl: "/savon2.jpg" },
 	//{ href: "/jackets", name: "Jackets", imageUrl: "/jackets.jpg" },
 	//{ href: "/suits", name: "Suits", imageUrl: "/suits.jpg" },
 	
@@ -38,7 +38,7 @@ const HomePage = () => {
 					Explore Our Categories
 				</h1>
 				<p className='text-center text-xl text-gray-300 mb-12'>
-					Discover the latest trends in eco-friendly fashion
+					Discover our latest products trends
 				</p>
 
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>

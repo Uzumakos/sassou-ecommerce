@@ -12,33 +12,33 @@ const Footer = () => {
 
         {/* Shop links */}
         <div>
-          <h3 className="text-lg text-gray-800 mb-4">Shop</h3>
+          <h3 className="text-lg text-emerald-400 mb-4">Shop</h3>
           <ul className="space-y-2 text-gray-600">
             <li>
               <Link to="#" className="hover:text-gray-500 transition-colors">
-                Men&apos;s Top Wear
+                Hair Care
               </Link>
             </li>
             <li>
               <Link to="#" className="hover:text-gray-500 transition-colors">
-                Women&apos;s Top Wear
+                Skin Care
               </Link>
             </li>
             <li>
               <Link to="#" className="hover:text-gray-500 transition-colors">
-                Men&apos;s Bottom Wear
+                Candle
               </Link>
             </li>
             <li>
               <Link to="#" className="hover:text-gray-500 transition-colors">
-                Women&apos;s Bottom Wear
+                Soap
               </Link>
             </li>
           </ul>
         </div>
         {/* Support Links */}
         <div>
-          <h3 className="text-lg text-gray-800 mb-4">Support</h3>
+          <h3 className="text-lg text-emerald-400 mb-4">Support</h3>
           <ul className="space-y-2 text-gray-600">
             <li>
               <Link to="#" className="hover:text-gray-500 transition-colors">
@@ -64,7 +64,7 @@ const Footer = () => {
         </div>
         {/* Follow us */}
         <div>
-          <h3 className="text-lg text-gray-800 mb-4">Follow Us</h3>
+          <h3 className="text-lg text-emerald-400 mb-4">Follow Us</h3>
           <div className="flex items-center space-x-4 mb-6">
             <a
               href="https://www.facebook.com"
@@ -91,7 +91,7 @@ const Footer = () => {
               <RiTwitterXLine className="h-4 w-4" />
             </a>
           </div>
-          <p className="text-gray-500">Call Us</p>
+          <p className="text-emerald-400">Call Us</p>
           <p>
             <FiPhoneCall className="inline-block mr-2" />
             0123-456-789
@@ -100,8 +100,8 @@ const Footer = () => {
       </div>
       {/* Footer Bottom */}
       <div className="container mx-auto mt-12 px-4 lg:px-0 border-t border-gray-200 pt-6">
-        <p className="text-gray-500 text-sm tracking-tighter text-center">
-          © 2025, Sassou&apos;s Essence. All Rights Reserved.Made by A.E.B Services
+        <p className="text-emerald-500 text-sm tracking-tighter text-center">
+          © 2025, Sassou&apos;s Essence. All Rights Reserved.
         </p>
       </div>
     </footer>
