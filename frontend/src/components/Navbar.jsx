@@ -2,6 +2,7 @@ import { ShoppingCart, UserPlus, LogIn, LogOut, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
+import Topbar from "./Topbar";
 
 const Navbar = () => {
 	const { user, logout } = useUserStore();
@@ -15,7 +16,7 @@ const Navbar = () => {
 					<Link to='/' className='text-2xl font-bold text-emerald-400 items-center space-x-2 flex'>
 						Sassous
 					</Link>
-
+                     <Topbar />
 					<nav className='flex flex-wrap items-center gap-4'>
 						<Link
 							to={"/"}
