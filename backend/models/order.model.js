@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema(
 			required: true,
 			min: 0,
 		},
-		stripeSessionId: {
+		paypalOrderId: {
 			type: String,
 			unique: true,
 		},

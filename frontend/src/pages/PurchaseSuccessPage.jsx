@@ -11,25 +11,27 @@ const PurchaseSuccessPage = () => {
 	const [error, setError] = useState(null);
 
 	useEffect(() => {
-		const handleCheckoutSuccess = async (sessionId) => {
+		const handlePayPalSuccess = async (token) => {
 			try {
-				await axios.post("/payments/checkout-success", {
-					sessionId,
+				await axios.post("/payments/capture-paypal-order", {
+					orderId: token,
 				});
 				clearCart();
 			} catch (error) {
 				console.log(error);
+				setError("Failed to process payment. Please contact support.");
 			} finally {
 				setIsProcessing(false);
 			}
 		};
 
-		const sessionId = new URLSearchParams(window.location.search).get("session_id");
-		if (sessionId) {
-			handleCheckoutSuccess(sessionId);
+		// PayPal returns 'token' parameter which is the order ID
+		const token = new URLSearchParams(window.location.search).get("token");
+		if (token) {
+			handlePayPalSuccess(token);
 		} else {
 			setIsProcessing(false);
-			setError("No session ID found in the URL");
+			setError("No PayPal order ID found in the URL");
 		}
 	}, [clearCart]);
 
