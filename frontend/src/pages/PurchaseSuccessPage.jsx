@@ -7,7 +7,7 @@ import Confetti from "react-confetti";
 
 const PurchaseSuccessPage = () => {
 	const [isProcessing, setIsProcessing] = useState(true);
-	const { clearCart } = useCartStore();
+	const { clearCart, getCartItems } = useCartStore();
 	const [error, setError] = useState(null);
 	const [orderId, setOrderId] = useState("");
 
@@ -17,7 +17,8 @@ const PurchaseSuccessPage = () => {
 				await axios.post("/payments/capture-paypal-order", {
 					orderId: token,
 				});
-				clearCart();
+				await clearCart();
+				await getCartItems();
 				setOrderId(token);
 			} catch (error) {
 				console.log(error);
@@ -34,7 +35,7 @@ const PurchaseSuccessPage = () => {
 			setIsProcessing(false);
 			setError("No PayPal order ID found in the URL");
 		}
-	}, [clearCart]);
+	}, [clearCart, getCartItems]);
 
 	if (isProcessing) return "Processing...";
 
