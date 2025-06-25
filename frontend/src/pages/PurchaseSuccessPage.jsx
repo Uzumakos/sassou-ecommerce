@@ -9,6 +9,7 @@ const PurchaseSuccessPage = () => {
 	const [isProcessing, setIsProcessing] = useState(true);
 	const { clearCart } = useCartStore();
 	const [error, setError] = useState(null);
+	const [orderId, setOrderId] = useState("");
 
 	useEffect(() => {
 		const handlePayPalSuccess = async (token) => {
@@ -17,6 +18,7 @@ const PurchaseSuccessPage = () => {
 					orderId: token,
 				});
 				clearCart();
+				setOrderId(token);
 			} catch (error) {
 				console.log(error);
 				setError("Failed to process payment. Please contact support.");
@@ -25,7 +27,6 @@ const PurchaseSuccessPage = () => {
 			}
 		};
 
-		// PayPal returns 'token' parameter which is the order ID
 		const token = new URLSearchParams(window.location.search).get("token");
 		if (token) {
 			handlePayPalSuccess(token);
@@ -68,7 +69,7 @@ const PurchaseSuccessPage = () => {
 					<div className='bg-gray-700 rounded-lg p-4 mb-6'>
 						<div className='flex items-center justify-between mb-2'>
 							<span className='text-sm text-gray-400'>Order number</span>
-							<span className='text-sm font-semibold text-emerald-400'>#12345</span>
+							<span className='text-sm font-semibold text-emerald-400'>#{orderId}</span>
 						</div>
 						<div className='flex items-center justify-between'>
 							<span className='text-sm text-gray-400'>Estimated delivery</span>
@@ -77,17 +78,18 @@ const PurchaseSuccessPage = () => {
 					</div>
 
 					<div className='space-y-4'>
-						<button
+						<Link
+							to={"/user-dashboard"}
 							className='w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4
-             rounded-lg transition duration-300 flex items-center justify-center'
+							rounded-lg transition duration-300 flex items-center justify-center'
 						>
 							<HandHeart className='mr-2' size={18} />
 							Thanks for trusting us!
-						</button>
+						</Link>
 						<Link
 							to={"/"}
 							className='w-full bg-gray-700 hover:bg-gray-600 text-emerald-400 font-bold py-2 px-4 
-            rounded-lg transition duration-300 flex items-center justify-center'
+							rounded-lg transition duration-300 flex items-center justify-center'
 						>
 							Continue Shopping
 							<ArrowRight className='ml-2' size={18} />
@@ -98,4 +100,5 @@ const PurchaseSuccessPage = () => {
 		</div>
 	);
 };
+
 export default PurchaseSuccessPage;

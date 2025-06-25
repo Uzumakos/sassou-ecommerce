@@ -6,7 +6,6 @@ const router = express.Router();
 
 // Request timeout middleware for payment routes
 const setPaymentTimeout = (req, res, next) => {
-  // Set a 30-second timeout for payment operations
   req.setTimeout(30000, () => {
     console.error(`Payment request timeout for ${req.path}`);
     if (!res.headersSent) {
@@ -16,8 +15,7 @@ const setPaymentTimeout = (req, res, next) => {
       });
     }
   });
-  
-  // Also set response timeout
+
   res.setTimeout(30000, () => {
     console.error(`Payment response timeout for ${req.path}`);
     if (!res.headersSent) {
@@ -27,18 +25,18 @@ const setPaymentTimeout = (req, res, next) => {
       });
     }
   });
-  
+
   next();
 };
 
 // Error handling middleware for payment routes
 const handlePaymentErrors = (error, req, res, next) => {
   console.error('Payment route error:', error);
-  
+
   if (res.headersSent) {
     return next(error);
   }
-  
+
   // Handle specific PayPal errors
   if (error.name === 'PayPalHttpError') {
     return res.status(error.statusCode || 500).json({
@@ -47,7 +45,7 @@ const handlePaymentErrors = (error, req, res, next) => {
       details: error.details || 'Unknown PayPal error'
     });
   }
-  
+
   // Handle timeout errors
   if (error.code === 'ECONNRESET' || error.code === 'ECONNABORTED') {
     return res.status(408).json({
@@ -55,7 +53,7 @@ const handlePaymentErrors = (error, req, res, next) => {
       message: 'Request was interrupted or timed out'
     });
   }
-  
+
   // Handle JSON parsing errors
   if (error instanceof SyntaxError && error.message.includes('JSON')) {
     return res.status(400).json({
@@ -63,19 +61,20 @@ const handlePaymentErrors = (error, req, res, next) => {
       message: 'Request body contains invalid JSON'
     });
   }
-  
-  // Generic error response
+
+  // Generic fallback error
   res.status(500).json({
     error: 'Payment processing error',
-    message: error.message || 'An unexpected error occurred'
+    message: typeof error.message === 'string' ? error.message : 'An unexpected error occurred'
   });
 };
 
 // Apply middleware to all payment routes
 router.use(setPaymentTimeout);
 
-// Payment routes with enhanced error handling
+// POST /create-paypal-order
 router.post("/create-paypal-order", protectRoute, async (req, res, next) => {
+  console.log("Incoming: /create-paypal-order");
   try {
     await createPayPalOrder(req, res);
   } catch (error) {
@@ -83,7 +82,9 @@ router.post("/create-paypal-order", protectRoute, async (req, res, next) => {
   }
 });
 
+// POST /capture-paypal-order
 router.post("/capture-paypal-order", protectRoute, async (req, res, next) => {
+  console.log("Incoming: /capture-paypal-order");
   try {
     await capturePayPalOrder(req, res);
   } catch (error) {
@@ -91,17 +92,17 @@ router.post("/capture-paypal-order", protectRoute, async (req, res, next) => {
   }
 });
 
-// Health check endpoint for payment service
+// Health check
 router.get("/health", (req, res) => {
   res.status(200).json({
     status: 'OK',
     service: 'Payment Service',
     timestamp: new Date().toISOString(),
-    paypal_configured: !!(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET)
+    paypal_configured: Boolean(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET)
   });
 });
 
-// GET route to show available endpoints (for debugging)
+// Debug endpoint to list available routes
 router.get("/", (req, res) => {
   res.status(200).json({
     message: "Payment API Endpoints",
@@ -114,7 +115,7 @@ router.get("/", (req, res) => {
   });
 });
 
-// Apply error handling middleware
+// Final catch-all error handler
 router.use(handlePaymentErrors);
 
 export default router;
