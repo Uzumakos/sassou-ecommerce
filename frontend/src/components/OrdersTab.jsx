@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../lib/axios"; // Fixed: Use your configured axios instance
 
 const OrdersTab = () => {
 	const [orders, setOrders] = useState([]);
@@ -9,8 +9,19 @@ const OrdersTab = () => {
 	useEffect(() => {
 		const fetchOrders = async () => {
 			try {
-				const res = await axios.get("/api/orders"); // 🔁 Tu peux adapter si besoin
-				setOrders(res.data.orders);
+				// Try different possible endpoints
+				let res;
+				try {
+					res = await axios.get("/orders"); // Try without /api prefix first
+				} catch (err) {
+					if (err.response?.status === 404) {
+						res = await axios.get("/api/orders"); // Fallback to /api/orders
+					} else {
+						throw err;
+					}
+				}
+				
+				setOrders(res.data.orders || res.data || []);
 			} catch (err) {
 				console.error("Error fetching orders:", err);
 				setError("Failed to load orders");
@@ -24,6 +35,14 @@ const OrdersTab = () => {
 
 	if (loading) return <p className="text-gray-300 text-center">Loading orders...</p>;
 	if (error) return <p className="text-red-500 text-center">{error}</p>;
+
+	if (orders.length === 0) {
+		return (
+			<div className="text-center py-8">
+				<p className="text-gray-400">No orders found</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className="overflow-x-auto">
@@ -44,14 +63,14 @@ const OrdersTab = () => {
 							</td>
 							<td className="px-4 py-2">
 								<ul className="list-disc pl-5">
-									{order.products.map((item, idx) => (
+									{order.products?.map((item, idx) => (
 										<li key={idx}>
-											{item.product?.name || "Unnamed"} × {item.quantity} – ${item.price}
+											{item.product?.name || "Unnamed"} × {item.quantity} – ${(item.price || 0).toFixed(2)}
 										</li>
-									))}
+									)) || <li>No products</li>}
 								</ul>
 							</td>
-							<td className="px-4 py-2 font-semibold">${order.totalAmount.toFixed(2)}</td>
+							<td className="px-4 py-2 font-semibold">${(order.totalAmount || 0).toFixed(2)}</td>
 							<td className="px-4 py-2">{new Date(order.createdAt).toLocaleString()}</td>
 						</tr>
 					))}

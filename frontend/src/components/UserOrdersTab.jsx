@@ -37,10 +37,13 @@ const UserOrdersTab = () => {
 						Order #{order._id.slice(-6).toUpperCase()} – Total: ${order.totalAmount}
 					</h3>
 					<ul className="list-disc list-inside text-gray-200">
-						{order.products.map((item) => (
-							<li key={item.product._id}>
-								{item.product.name} – {item.quantity} x ${item.price}
-							</li>
+						{order.products.map((item, index) => (
+						<li key={item.product?._id || index}>
+							{item.product?.name
+							? `${item.product.name} – ${item.quantity} x $${item.price}`
+							: <span className="text-red-400 italic">Unknown product – {item.quantity} x ${item.price}</span>
+							}
+						</li>
 						))}
 					</ul>
 					<p className="text-sm text-gray-400 mt-2">

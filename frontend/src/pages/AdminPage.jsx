@@ -1,18 +1,27 @@
-import { BarChart, PlusCircle, ShoppingBasket, ReceiptText } from "lucide-react";
+import {
+	BarChart3,
+	PlusCircle,
+	ShoppingBag,
+	ReceiptText,
+	Trash2,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
+import axios from "../lib/axios";
 
 import AnalyticsTab from "../components/AnalyticsTab";
 import CreateProductForm from "../components/CreateProductForm";
 import ProductsList from "../components/ProductsList";
-import OrdersTab from "../components/OrdersTab"; // ✅ Nouveau composant
+import OrdersTab from "../components/OrdersTab";
 import { useProductStore } from "../stores/useProductStore";
+// ✅ Auth store
 
 const tabs = [
 	{ id: "create", label: "Create Product", icon: PlusCircle },
-	{ id: "products", label: "Products", icon: ShoppingBasket },
-	{ id: "analytics", label: "Analytics", icon: BarChart },
-	{ id: "orders", label: "Orders", icon: ReceiptText }, // ✅ Nouvel onglet
+	{ id: "products", label: "Products", icon: ShoppingBag },
+	{ id: "analytics", label: "Analytics", icon: BarChart3 },
+	{ id: "orders", label: "Orders", icon: ReceiptText },
 ];
 
 const AdminPage = () => {
@@ -22,6 +31,22 @@ const AdminPage = () => {
 	useEffect(() => {
 		fetchAllProducts();
 	}, [fetchAllProducts]);
+
+
+	const handleClearCache = async () => {
+		const confirmed = window.confirm(
+			"Are you sure you want to clear the Redis cache?\nThis may affect featured products."
+		);
+		if (!confirmed) return;
+
+		try {
+			await axios.delete("/admin/clear-cache");
+			toast.success("Redis cache cleared successfully!");
+		} catch (error) {
+			console.error("Failed to clear Redis cache:", error);
+			toast.error("Failed to clear cache");
+		}
+	};
 
 	return (
 		<div className='min-h-screen relative overflow-hidden'>
@@ -55,7 +80,20 @@ const AdminPage = () => {
 				{activeTab === "create" && <CreateProductForm />}
 				{activeTab === "products" && <ProductsList />}
 				{activeTab === "analytics" && <AnalyticsTab />}
-				{activeTab === "orders" && <OrdersTab />} {/* ✅ Ajout du contenu */}
+				{activeTab === "orders" && (
+					<>
+						<OrdersTab />
+						<div className='mt-6 flex justify-center'>
+							<button
+								onClick={handleClearCache}
+								className='flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md transition'
+							>
+								<Trash2 size={18} />
+								Clear Redis Cache
+							</button>
+						</div>
+					</>
+				)}
 			</div>
 		</div>
 	);
