@@ -9,7 +9,7 @@ const UserOrdersTab = () => {
 	useEffect(() => {
 		const fetchOrders = async () => {
 			try {
-				const res = await axios.get("/orders/my-orders");
+				const res = await axios.get("/orders/user"); // FIXED: Changed from "/orders/my-orders" to "/orders/user"
 				setOrders(res.data.orders);
 			} catch (err) {
 			console.error("Error fetching user orders:", err);

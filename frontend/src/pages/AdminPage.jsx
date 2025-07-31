@@ -15,7 +15,6 @@ import CreateProductForm from "../components/CreateProductForm";
 import ProductsList from "../components/ProductsList";
 import OrdersTab from "../components/OrdersTab";
 import { useProductStore } from "../stores/useProductStore";
-// ✅ Auth store
 
 const tabs = [
 	{ id: "create", label: "Create Product", icon: PlusCircle },
@@ -31,7 +30,6 @@ const AdminPage = () => {
 	useEffect(() => {
 		fetchAllProducts();
 	}, [fetchAllProducts]);
-
 
 	const handleClearCache = async () => {
 		const confirmed = window.confirm(

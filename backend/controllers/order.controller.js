@@ -1,11 +1,12 @@
 import Order from "../models/order.model.js";
+import mongoose from "mongoose";
 
 export const getAllOrders = async (req, res) => {
 	try {
 		const orders = await Order.find()
 			.sort({ createdAt: -1 })
-			.populate("user", "name")
-			.populate("products.product", "name");
+			.populate("user", "name email")
+			.populate("products.product", "name price");
 
 		res.status(200).json({ orders });
 	} catch (error) {
@@ -19,7 +20,7 @@ export const getUserOrders = async (req, res) => {
 		const userId = req.user._id;
 		const orders = await Order.find({ user: userId })
 			.sort({ createdAt: -1 })
-			.populate("products.product", "name");
+			.populate("products.product", "name price image");
 
 		res.status(200).json({ orders });
 	} catch (error) {
@@ -28,12 +29,18 @@ export const getUserOrders = async (req, res) => {
 	}
 };
 
-// Add this missing function
 export const getOrderById = async (req, res) => {
 	try {
-		const order = await Order.findById(req.params.id)
+		const { id } = req.params;
+		
+		// Validate ObjectId format
+		if (!mongoose.Types.ObjectId.isValid(id)) {
+			return res.status(400).json({ message: "Invalid order ID format" });
+		}
+
+		const order = await Order.findById(id)
 			.populate("user", "name email")
-			.populate("products.product", "name price");
+			.populate("products.product", "name price image");
 
 		if (!order) {
 			return res.status(404).json({ message: "Order not found" });
