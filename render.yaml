@@ -41,5 +41,5 @@ services:
   - type: web
     name: sassou-ecommerce-frontend
     runtime: static
-    buildCommand: npm install --prefix frontend && npm run build --prefix frontend
+    buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/dist
