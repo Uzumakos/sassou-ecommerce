@@ -17,7 +17,7 @@ const slides = [
       "Nourish and strengthen your hair with our natural oils — a daily ritual your hair will thank you for.",
   },
   {
-    img: "/Savon1.jpg",
+    img: "/puppy1.jpg",
     title: "Perfumed Candle",
     subtitle:
       "Set the mood with our hand-poured perfumed candles — elegance and aroma in every flicker, shipped worldwide.",

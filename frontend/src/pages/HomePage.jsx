@@ -11,6 +11,7 @@ const categories = [
 	{ href: "/hair care", name: "Hair Care", imageUrl: "/package1.jpg" },
 	{ href: "/candle", name: "Candle", imageUrl: "/puppy1.jpg" },
 	{ href: "/soap", name: "Soap", imageUrl: "/savon2.jpg" },
+	{ href: "/soap", name: "Seasonal Gifts", imageUrl: "/savon2.jpg" },
 ];
 
 const HomePage = () => {
